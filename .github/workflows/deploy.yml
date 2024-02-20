@@ -17,6 +17,7 @@ permissions:
 
 env:
   infrastructureTemplathPath: infrastructure/deploy.bicep
+  infrastructureParametersPath: infrastructure/_parameters/prod.bicepparam
 
 jobs:
   infrastructure:
@@ -37,4 +38,5 @@ jobs:
         uses: ./.github/actions/infra-deploy
         with:
           templatePath: ${{ env.infrastructureTemplathPath }}
+          parametersPath: ${{ env.infrastructureParametersPath }}
           preview: ${{ github.event.inputs.preview }}
