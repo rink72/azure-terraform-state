@@ -10,6 +10,9 @@ param location string = resourceGroup().location
 @description('Principals to assign Storage account access')
 param principals array = []
 
+@description('Containers to create')
+param containers array = []
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: name
   tags: tags
@@ -32,6 +35,19 @@ resource blobContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@
     roleDefinitionId: principal.roleId
     principalId: principal.id
     principalType: principal.type
+  }
+}]
+
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+  parent: storageAccount
+  name: 'default'
+}
+
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = [for container in containers: {
+  parent: blobService
+  name: container
+  properties: {
+    publicAccess: 'None'
   }
 }]
 

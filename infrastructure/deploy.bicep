@@ -18,6 +18,11 @@ param deploymentNameSuffix string = utcNow('yyyyMMddhhmmss')
 @description('Principals to assign access')
 param principals array = []
 
+@description('Containers to create')
+param containers array = [
+  'tfstate'
+]
+
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   name: resourceGroupName
   location: location
@@ -31,6 +36,7 @@ module storageAccount 'components/storageaccount.bicep' = {
     name: storageAccountName
     location: location
     principals: principals
+    containers: containers
     tags: tags
   }
 }
